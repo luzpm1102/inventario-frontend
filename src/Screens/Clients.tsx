@@ -35,13 +35,13 @@ const Clients = () => {
                   <td>{client.direccion}</td>
                   <td>{client.telefono}</td>
                   <td>
-                    <Link to={`/update/${client.idCliente}`}>
+                    <Link to={`/updateClient/${client.idCliente}`}>
                       <button>Editar</button>
                     </Link>
                     <button onClick={() => deleteClient(client.idCliente)}>
                       Eliminar
                     </button>
-                    <Link to={`/view/${client.idCliente}`}>
+                    <Link to={`/viewClient/${client.idCliente}`}>
                       <button>Ver</button>
                     </Link>
                   </td>

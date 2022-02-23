@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import api from '../API/axios';
 import { useForm } from '../Hooks/useForm';
 import { AddClient, Client } from '../Interfaces/Client';
 import useDatabase from '../Hooks/useDatabase';
+import { useEffect } from 'react';
 
 const AddEditClient = () => {
+  const { id } = useParams();
   const { nombre, direccion, telefono, onChange, setFormValue } =
     useForm<AddClient>({
       nombre: '',
@@ -13,15 +15,29 @@ const AddEditClient = () => {
       telefono: '',
     });
 
-  const { addClient } = useDatabase();
+  const { addClient, updateClient } = useDatabase();
+
+  useEffect(() => {
+    if (id) {
+      api.get(`/clients/${id}`).then((res) => {
+        setFormValue({ ...res.data[0] });
+      });
+    }
+  }, [id]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!nombre || !direccion || !telefono) {
       alert('Es necesario que llene la informacion solicitada');
     } else {
-      addClient(nombre, direccion, telefono);
-      setFormValue({ nombre: '', direccion: '', telefono: '' });
+      if (id) {
+        const idCliente = parseInt(id);
+        updateClient({ nombre, direccion, telefono, idCliente });
+        setFormValue({ nombre: '', direccion: '', telefono: '' });
+      } else {
+        addClient(nombre, direccion, telefono);
+        setFormValue({ nombre: '', direccion: '', telefono: '' });
+      }
     }
   };
   return (
@@ -49,8 +65,8 @@ const AddEditClient = () => {
           value={telefono}
           onChange={({ target }) => onChange(target.value, 'telefono')}
         />
-        <input type='submit' value='Save' />
-        <Link to='/'>
+        <input type='submit' value={id ? 'Update' : 'Save'} />
+        <Link to='/Clients'>
           <input type='button' value='Go Back' />
         </Link>
       </form>

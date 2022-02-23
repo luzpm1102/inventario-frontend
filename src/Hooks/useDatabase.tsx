@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../API/axios';
-import { Client } from '../Interfaces/Client';
+import { Client, AddClient } from '../Interfaces/Client';
 
 interface URL {
   whatToGet: 'clients' | 'products';
@@ -13,7 +13,7 @@ const useDatabase = () => {
   const navigate = useNavigate();
 
   const loadData = async ({ whatToGet }: URL) => {
-    const { data } = await api.get(`/get/${whatToGet}`);
+    const { data } = await api.get(`/${whatToGet}`);
     if (data) {
       switch (whatToGet) {
         case 'clients':
@@ -35,7 +35,7 @@ const useDatabase = () => {
 
   const deleteClient = (idClient: number) => {
     if (window.confirm('Seguro que desea eliminar?')) {
-      api.delete(`/remove/${idClient}`);
+      api.delete(`clients/remove/${idClient}`);
       alert('Cliente eliminado satisfatoriamente');
       setTimeout(() => {
         loadData({ whatToGet: 'clients' });
@@ -45,7 +45,7 @@ const useDatabase = () => {
 
   const addClient = (nombre: string, direccion: string, telefono: string) => {
     api
-      .post('/post/client', { nombre, direccion, telefono })
+      .post('/clients/insert', { nombre, direccion, telefono })
       .then(() => {})
       .catch((err) => {
         console.log(err);
@@ -57,7 +57,33 @@ const useDatabase = () => {
     }, 500);
   };
 
-  return { clients, deleteClient, addClient };
+  const updateClient = ({ nombre, direccion, telefono, idCliente }: Client) => {
+    api
+      .put(`/clients/update/${idCliente}`, { nombre, direccion, telefono })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('error: ' + err);
+      });
+    alert('Updated succesfully');
+    setTimeout(() => {
+      navigate('/Clients');
+    }, 500);
+  };
+
+  // let client: AddClient;
+
+  // const getOneClient = (idClient: number) => {
+  //   api.get(`/get/clients/${idClient}`).then((res) => {
+  //     client = { ...res.data[0] };
+  //   });
+
+  //   return client;
+  // };
+
+  return { clients, deleteClient, addClient, updateClient };
 };
 
 export default useDatabase;
