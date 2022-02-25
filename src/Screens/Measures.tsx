@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useDatabase from '../Hooks/useDatabase';
 
-const Clients = () => {
+const Measures = () => {
   useEffect(() => {
-    loadData({ whatToGet: 'clients' });
+    loadData({ whatToGet: 'medida' });
   }, []);
 
-  const { clients, deleteClient, loadData } = useDatabase();
-
+  const { measures, deleteMeasure, loadData } = useDatabase();
   return (
     <div>
-      <h1>Clientes</h1>
-      <Link to={'/addClient'}>
-        <button>Agregar cliente</button>
+      <h1>Medidas</h1>
+      <Link to={'/addMeasure'}>
+        <button>Agregar Medida</button>
       </Link>
 
       <div>
@@ -21,30 +20,28 @@ const Clients = () => {
           <thead>
             <tr>
               <th>No.</th>
-              <th>IdCliente</th>
+              <th>idMedida</th>
               <th>Nombre</th>
-              <th>Direccion</th>
-              <th>Telefono</th>
+              <th>Nombre corto</th>
               <th>Accion</th>
             </tr>
           </thead>
           <tbody>
-            {clients.map((client, index) => {
+            {measures.map((measure, index) => {
               return (
-                <tr key={client.idCliente}>
+                <tr key={measure.idMedida}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{client.idCliente}</td>
-                  <td>{client.nombre}</td>
-                  <td>{client.direccion}</td>
-                  <td>{client.telefono}</td>
+                  <td>{measure.idMedida}</td>
+                  <td>{measure.nombre}</td>
+                  <td>{measure.nombreCorto}</td>
                   <td>
-                    <Link to={`/updateClient/${client.idCliente}`}>
+                    <Link to={`/updateMeasure/${measure.idMedida}`}>
                       <button>Editar</button>
                     </Link>
-                    <button onClick={() => deleteClient(client.idCliente)}>
+                    <button onClick={() => deleteMeasure(measure.idMedida)}>
                       Eliminar
                     </button>
-                    <Link to={`/viewClient/${client.idCliente}`}>
+                    <Link to={`/viewMeasure/${measure.idMedida}`}>
                       <button>Ver</button>
                     </Link>
                   </td>
@@ -60,4 +57,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Measures;

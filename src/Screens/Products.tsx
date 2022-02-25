@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useDatabase from '../Hooks/useDatabase';
 
-const Clients = () => {
+const Products = () => {
   useEffect(() => {
-    loadData({ whatToGet: 'clients' });
+    loadData({ whatToGet: 'products' });
   }, []);
 
-  const { clients, deleteClient, loadData } = useDatabase();
-
+  const { products, deleteProduct, loadData } = useDatabase();
   return (
     <div>
-      <h1>Clientes</h1>
-      <Link to={'/addClient'}>
-        <button>Agregar cliente</button>
+      <h1>Productos</h1>
+      <Link to={'/addProduct'}>
+        <button>Agregar Producto</button>
       </Link>
 
       <div>
@@ -21,30 +20,30 @@ const Clients = () => {
           <thead>
             <tr>
               <th>No.</th>
-              <th>IdCliente</th>
+              <th>IdProducto</th>
               <th>Nombre</th>
-              <th>Direccion</th>
-              <th>Telefono</th>
+              <th>Descripcion</th>
+              <th>SKU</th>
               <th>Accion</th>
             </tr>
           </thead>
           <tbody>
-            {clients.map((client, index) => {
+            {products.map((product, index) => {
               return (
-                <tr key={client.idCliente}>
+                <tr key={product.idProducto}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{client.idCliente}</td>
-                  <td>{client.nombre}</td>
-                  <td>{client.direccion}</td>
-                  <td>{client.telefono}</td>
+                  <td>{product.idProducto}</td>
+                  <td>{product.nombre}</td>
+                  <td>{product.descripcion}</td>
+                  <td>{product.SKU}</td>
                   <td>
-                    <Link to={`/updateClient/${client.idCliente}`}>
+                    <Link to={`/updateProduct/${product.idProducto}`}>
                       <button>Editar</button>
                     </Link>
-                    <button onClick={() => deleteClient(client.idCliente)}>
+                    <button onClick={() => deleteProduct(product.idProducto)}>
                       Eliminar
                     </button>
-                    <Link to={`/viewClient/${client.idCliente}`}>
+                    <Link to={`/viewProduct/${product.idProducto}`}>
                       <button>Ver</button>
                     </Link>
                   </td>
@@ -60,4 +59,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Products;

@@ -35,7 +35,7 @@ const AddEditClient = () => {
         updateClient({ nombre, direccion, telefono, idCliente });
         setFormValue({ nombre: '', direccion: '', telefono: '' });
       } else {
-        addClient(nombre, direccion, telefono);
+        addClient({ nombre, direccion, telefono });
         setFormValue({ nombre: '', direccion: '', telefono: '' });
       }
     }

@@ -13,11 +13,12 @@ const useDatabase = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [measures, setMeasures] = useState<Measure[]>([]);
-  const [data, setData] = useState([]);
   const navigate = useNavigate();
 
   const loadData = async ({ whatToGet }: URL) => {
     const { data } = await api.get(`/${whatToGet}`);
+    console.log(whatToGet);
+
     if (data) {
       switch (whatToGet) {
         case 'clients':
@@ -30,19 +31,14 @@ const useDatabase = () => {
           setMeasures(data);
           break;
         default:
-          setData(data);
+          console.log('default');
+
           break;
       }
     } else {
       console.log('No se encontro data');
     }
   };
-
-  useEffect(() => {
-    loadData({ whatToGet: 'clients' });
-    loadData({ whatToGet: 'products' });
-    loadData({ whatToGet: 'medida' });
-  }, []);
 
   //CLIENTS
 
@@ -183,6 +179,7 @@ const useDatabase = () => {
     measures,
     updateMeasure,
     deleteMeasure,
+    loadData,
   };
 };
 
