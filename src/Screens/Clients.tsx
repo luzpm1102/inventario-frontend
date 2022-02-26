@@ -21,7 +21,7 @@ const Clients = () => {
           <thead>
             <tr>
               <th>No.</th>
-              <th>IdCliente</th>
+
               <th>Nombre</th>
               <th>Direccion</th>
               <th>Telefono</th>
@@ -33,7 +33,7 @@ const Clients = () => {
               return (
                 <tr key={client.idCliente}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{client.idCliente}</td>
+
                   <td>{client.nombre}</td>
                   <td>{client.direccion}</td>
                   <td>{client.telefono}</td>

@@ -2,45 +2,48 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useDatabase from '../Hooks/useDatabase';
 
-const Measures = () => {
+const Orders = () => {
   useEffect(() => {
-    loadData({ whatToGet: 'medida' });
+    loadData({ whatToGet: 'order' });
   }, []);
 
-  const { measures, deleteMeasure, loadData } = useDatabase();
+  const { loadData, orders } = useDatabase();
+
   return (
     <div>
-      <h1>Medidas</h1>
-      <Link to={'/addMeasure'}>
-        <button>Agregar Medida</button>
+      <h1>Orders</h1>
+      <Link to={'/addOrder'}>
+        <button>Agregar Orden</button>
       </Link>
-
       <div>
         <table>
           <thead>
             <tr>
               <th>No.</th>
-
-              <th>Nombre</th>
-              <th>Nombre corto</th>
+              <th>idOrden</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Total</th>
               <th>Accion</th>
             </tr>
           </thead>
           <tbody>
-            {measures.map((measure, index) => {
+            {orders.map((order, index) => {
               return (
-                <tr key={measure.idMedida}>
+                <tr key={order.idOrden}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{measure.nombre}</td>
-                  <td>{measure.nombreCorto}</td>
+                  <td>{order.idOrden}</td>
+                  <td>{order.fecha}</td>
+                  <td>{order.cliente}</td>
+                  <td>{order.total}</td>
                   <td>
-                    <Link to={`/updateMeasure/${measure.idMedida}`}>
+                    <Link to={`/updateOrder/${order.idOrden}`}>
                       <button>Editar</button>
                     </Link>
-                    <button onClick={() => deleteMeasure(measure.idMedida)}>
+                    <button onClick={() => console.log('delete order')}>
                       Eliminar
                     </button>
-                    <Link to={`/viewMeasure/${measure.idMedida}`}>
+                    <Link to={`/viewOrder/${order.idOrden}`}>
                       <button>Ver</button>
                     </Link>
                   </td>
@@ -56,4 +59,4 @@ const Measures = () => {
   );
 };
 
-export default Measures;
+export default Orders;

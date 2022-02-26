@@ -18,10 +18,6 @@ const ViewClient = () => {
     <div>
       <h2>client</h2>
       <div>
-        <strong>ID: </strong>
-        <span>{client?.idCliente}</span>
-        <br />
-        <br />
         <strong>Nombre: </strong>
         <span>{client?.nombre}</span>
         <br />

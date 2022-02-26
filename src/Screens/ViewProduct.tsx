@@ -19,10 +19,6 @@ const ViewProduct = () => {
       <h2>Producto</h2>
       {product ? (
         <div>
-          <strong>ID: </strong>
-          <span>{product.idProducto}</span>
-          <br />
-          <br />
           <strong>Nombre: </strong>
           <span>{product.nombre}</span>
           <br />

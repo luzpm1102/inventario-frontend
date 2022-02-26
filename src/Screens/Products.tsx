@@ -20,7 +20,7 @@ const Products = () => {
           <thead>
             <tr>
               <th>No.</th>
-              <th>IdProducto</th>
+
               <th>Nombre</th>
               <th>Descripcion</th>
               <th>SKU</th>
@@ -32,7 +32,7 @@ const Products = () => {
               return (
                 <tr key={product.idProducto}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{product.idProducto}</td>
+
                   <td>{product.nombre}</td>
                   <td>{product.descripcion}</td>
                   <td>{product.SKU}</td>

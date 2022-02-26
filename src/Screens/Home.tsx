@@ -10,6 +10,8 @@ const Home = () => {
       <Link to='Products'>Ver Productos</Link>
       <br />
       <Link to='Measures'>Ver Medidas</Link>
+      <br />
+      <Link to='Orders'>Ver Ordenes</Link>
     </div>
   );
 };

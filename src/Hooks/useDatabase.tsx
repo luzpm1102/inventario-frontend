@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../API/axios';
 import { Client, AddClient } from '../Interfaces/Client';
 import { AddProduct, Product } from '../Interfaces/Product';
 import { AddMeasure, Measure } from '../Interfaces/Measure';
+import { Order } from '../Interfaces/Order';
 
 interface URL {
-  whatToGet: 'clients' | 'products' | 'medida';
+  whatToGet: 'clients' | 'products' | 'medida' | 'order';
 }
 
 const useDatabase = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [measures, setMeasures] = useState<Measure[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+
   const navigate = useNavigate();
 
   const loadData = async ({ whatToGet }: URL) => {
@@ -29,6 +32,9 @@ const useDatabase = () => {
           break;
         case 'medida':
           setMeasures(data);
+          break;
+        case 'order':
+          setOrders(data);
           break;
         default:
           console.log('default');
@@ -165,6 +171,26 @@ const useDatabase = () => {
       navigate('/Measures');
     }, 500);
   };
+  //ORDERS
+
+  const addOrder = (idCliente: number) => {
+    let insertedId: number;
+    api
+      .post('/order/insert', { idCliente })
+      .then((res) => {
+        insertedId = res.data[0];
+        console.log(insertedId);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('error: ' + err);
+      });
+    alert('Add Products to the order');
+    setTimeout(() => {
+      // navigate(`/Orders/${insertedId}`);
+      //this has to navigate to create new producto_orden where idOrden = newCreatedOrderID (this has to be insertedID)
+    }, 500);
+  };
 
   return {
     clients,
@@ -180,6 +206,8 @@ const useDatabase = () => {
     updateMeasure,
     deleteMeasure,
     loadData,
+    orders,
+    addOrder,
   };
 };
 

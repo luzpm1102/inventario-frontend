@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../API/axios';
 import { Measure } from '../Interfaces/Measure';
-import { Product } from '../Interfaces/Product';
-
 const ViewMeasure = () => {
   const [measure, setMeasure] = useState<Measure>();
   const { id } = useParams();
@@ -20,10 +18,6 @@ const ViewMeasure = () => {
       <h2>Medida</h2>
       {measure ? (
         <div>
-          <strong>ID: </strong>
-          <span>{measure.idMedida}</span>
-          <br />
-          <br />
           <strong>Nombre: </strong>
           <span>{measure.nombre}</span>
           <br />

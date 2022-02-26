@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import api from '../API/axios';
 import { useForm } from '../Hooks/useForm';
-import { AddClient, Client } from '../Interfaces/Client';
+import { AddClient } from '../Interfaces/Client';
 import useDatabase from '../Hooks/useDatabase';
 import { useEffect } from 'react';
 
