@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../API/axios';
 import useDatabase from '../Hooks/useDatabase';
 import { useForm } from '../Hooks/useForm';
-import { AddProduct } from '../Interfaces/Product';
+import { AddProduct, AddProductoMedida } from '../Interfaces/Product';
 
 const AddEditProduct = () => {
+  useEffect(() => {
+    loadData({ whatToGet: 'medida' });
+  }, []);
   const { id } = useParams();
   const { nombre, descripcion, SKU, onChange, setFormValue } =
     useForm<AddProduct>({
@@ -14,7 +17,16 @@ const AddEditProduct = () => {
       SKU: '',
     });
 
-  const { addProduct, updateProduct } = useDatabase();
+  const [medida, setMedida] = useState<string>('');
+
+  const {
+    addProduct,
+    updateProduct,
+    addProductMeasure,
+    editProductMeasure,
+    loadData,
+    measures,
+  } = useDatabase();
 
   useEffect(() => {
     if (id) {
@@ -38,6 +50,10 @@ const AddEditProduct = () => {
         setFormValue({ nombre: '', descripcion: '', SKU: '' });
       }
     }
+  };
+
+  const onChangeSelect = (e: React.FormEvent<HTMLSelectElement>) => {
+    setMedida(e.currentTarget.value);
   };
   return (
     <div>
@@ -66,6 +82,17 @@ const AddEditProduct = () => {
           value={SKU}
           onChange={({ target }) => onChange(target.value, 'SKU')}
         />
+        <br />
+        <select value={medida} onChange={onChangeSelect} defaultValue=''>
+          <option>Seleccione una medida</option>
+          {measures.map((measure) => {
+            return (
+              <option key={measure.idMedida} value={measure.idMedida}>
+                {measure.nombre}
+              </option>
+            );
+          })}
+        </select>
         <br />
         <input type='submit' value={id ? 'Update' : 'Save'} />
         <Link to='/Products'>

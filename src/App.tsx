@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AddEditClient from './Screens/AddEditClient';
 import AddEditMeasure from './Screens/AddEditMeasure';
-import AddEditOrder from './Screens/AddEditOrder';
+import AddOrder from './Screens/AddOrder';
 import AddEditProduct from './Screens/AddEditProduct';
 import Clients from './Screens/Clients';
 import Home from './Screens/Home';
@@ -12,6 +12,7 @@ import Products from './Screens/Products';
 import ViewClient from './Screens/ViewClient';
 import ViewMeasure from './Screens/ViewMeasure';
 import ViewProduct from './Screens/ViewProduct';
+import ViewOrder from './Screens/ViewOrder';
 
 const App = () => {
   return (
@@ -35,7 +36,8 @@ const App = () => {
         <Route path='/updateMeasure/:id' element={<AddEditMeasure />} />
         {/* Order Routes */}
         <Route path='/Orders' element={<Orders />} />
-        <Route path='/addOrder' element={<AddEditOrder />} />
+        <Route path='/addOrder' element={<AddOrder />} />
+        <Route path='/viewOrder/:id' element={<ViewOrder />} />
       </Routes>
     </BrowserRouter>
   );

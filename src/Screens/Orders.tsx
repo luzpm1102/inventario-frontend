@@ -7,7 +7,7 @@ const Orders = () => {
     loadData({ whatToGet: 'order' });
   }, []);
 
-  const { loadData, orders } = useDatabase();
+  const { loadData, orders, deleteOrder } = useDatabase();
 
   return (
     <div>
@@ -20,7 +20,6 @@ const Orders = () => {
           <thead>
             <tr>
               <th>No.</th>
-              <th>idOrden</th>
               <th>Fecha</th>
               <th>Cliente</th>
               <th>Total</th>
@@ -32,7 +31,6 @@ const Orders = () => {
               return (
                 <tr key={order.idOrden}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{order.idOrden}</td>
                   <td>{order.fecha}</td>
                   <td>{order.cliente}</td>
                   <td>{order.total}</td>
@@ -40,7 +38,7 @@ const Orders = () => {
                     <Link to={`/updateOrder/${order.idOrden}`}>
                       <button>Editar</button>
                     </Link>
-                    <button onClick={() => console.log('delete order')}>
+                    <button onClick={() => deleteOrder(order.idOrden)}>
                       Eliminar
                     </button>
                     <Link to={`/viewOrder/${order.idOrden}`}>

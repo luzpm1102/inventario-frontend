@@ -2,12 +2,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../API/axios';
 import { Client, AddClient } from '../Interfaces/Client';
-import { AddProduct, Product } from '../Interfaces/Product';
+import {
+  AddProduct,
+  AddProductoMedida,
+  Product,
+  ProductoMedida,
+} from '../Interfaces/Product';
 import { AddMeasure, Measure } from '../Interfaces/Measure';
-import { Order } from '../Interfaces/Order';
+import { AddProductoOrden, Order, ProductoOrden } from '../Interfaces/Order';
+import { EditProductoMedida } from '../Interfaces/Product';
 
 interface URL {
-  whatToGet: 'clients' | 'products' | 'medida' | 'order';
+  whatToGet:
+    | 'clients'
+    | 'products'
+    | 'medida'
+    | 'order'
+    | 'productoMedida/inventario';
 }
 
 const useDatabase = () => {
@@ -15,6 +26,7 @@ const useDatabase = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [measures, setMeasures] = useState<Measure[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [productoMedida, setProductoMedida] = useState<ProductoMedida[]>([]);
 
   const navigate = useNavigate();
 
@@ -35,6 +47,9 @@ const useDatabase = () => {
           break;
         case 'order':
           setOrders(data);
+          break;
+        case 'productoMedida/inventario':
+          setProductoMedida(data);
           break;
         default:
           console.log('default');
@@ -92,8 +107,13 @@ const useDatabase = () => {
 
   const deleteProduct = (idProduct: number) => {
     if (window.confirm('Seguro que desea eliminar?')) {
-      api.delete(`products/remove/${idProduct}`);
-      alert('Producto eliminado satisfatoriamente');
+      api.delete(`/products/remove/${idProduct}`).then((res) => {
+        if (res.data.errno) {
+          alert('producto no eliminado' + res.data.sqlMessage);
+        } else {
+          alert('Producto eliminado satisfatoriamente');
+        }
+      });
       setTimeout(() => {
         loadData({ whatToGet: 'products' });
       }, 500);
@@ -102,7 +122,7 @@ const useDatabase = () => {
 
   const addProduct = ({ nombre, descripcion, SKU }: AddProduct) => {
     api
-      .post('/product/insert', { nombre, descripcion, SKU })
+      .post('/products/insert', { nombre, descripcion, SKU })
       .then(() => {})
       .catch((err) => {
         console.log(err);
@@ -173,23 +193,126 @@ const useDatabase = () => {
   };
   //ORDERS
 
-  const addOrder = (idCliente: number) => {
-    let insertedId: number;
+  const addOrder = (idCliente: number, fechaEntrega: string) => {
     api
-      .post('/order/insert', { idCliente })
+      .post('/order/insert', { idCliente, fechaEntrega })
       .then((res) => {
-        insertedId = res.data[0];
-        console.log(insertedId);
+        setTimeout(() => {
+          navigate(`/viewOrder/${res.data.id}`);
+        }, 500);
       })
       .catch((err) => {
         console.log(err);
         alert('error: ' + err);
       });
     alert('Add Products to the order');
+  };
+  const deleteOrder = (idOrder: number) => {
+    if (window.confirm('Seguro que desea eliminar?')) {
+      api.delete(`order/remove/${idOrder}`);
+      alert('Orden eliminada satisfatoriamente');
+      setTimeout(() => {
+        loadData({ whatToGet: 'order' });
+      }, 500);
+    }
+  };
+  //delete producto orden
+  const deleteProductOrder = (idProductoOrden: number) => {
+    if (window.confirm('Seguro que desea eliminar?')) {
+      api.delete(`productoOrden/remove/${idProductoOrden}`);
+      alert('Producto Orden eliminado satisfatoriamente');
+      setTimeout(() => {
+        loadData({ whatToGet: 'order' });
+      }, 500);
+    }
+  };
+  //updateProductoOrden
+  const updateProductoOrden = ({
+    cantidad,
+    precioUnitario,
+    idProductoOrden,
+    idOrden,
+  }: ProductoOrden) => {
+    api
+      .put(`/productoOrden/update/${idProductoOrden}`, {
+        cantidad,
+        precioUnitario,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('error: ' + err);
+      });
+    alert('Updated succesfully');
     setTimeout(() => {
-      // navigate(`/Orders/${insertedId}`);
-      //this has to navigate to create new producto_orden where idOrden = newCreatedOrderID (this has to be insertedID)
+      navigate('/viewOrder/' + idOrden);
     }, 500);
+  };
+
+  const addMultiplesProducts = (products: any, idOrden: number) => {
+    api
+      .post('/productoOrden/insertMultiples', {
+        products,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('error: ' + err);
+      });
+    alert('Products added');
+    navigate('/viewOrder/' + idOrden);
+  };
+
+  const addProductMeasure = ({
+    idProducto,
+    idMedida,
+    precio,
+    cantidad,
+  }: AddProductoMedida) => {
+    api
+      .post('/productoMedida/insert', {
+        idMedida,
+        idProducto,
+        precio,
+        cantidad,
+      })
+      .then((res) => {
+        setTimeout(() => {
+          navigate('/Products');
+        }, 500);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('error: ' + err);
+      });
+  };
+  const editProductMeasure = ({
+    idProductoMedida,
+    idProducto,
+    idMedida,
+    precio,
+    cantidad,
+  }: EditProductoMedida) => {
+    api
+      .put(`/productoMedida/update/${idProductoMedida}`, {
+        idMedida,
+        idProducto,
+        precio,
+        cantidad,
+      })
+      .then((res) => {
+        setTimeout(() => {
+          navigate('/Products');
+        }, 500);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('error: ' + err);
+      });
   };
 
   return {
@@ -208,6 +331,14 @@ const useDatabase = () => {
     loadData,
     orders,
     addOrder,
+    deleteOrder,
+    deleteProductOrder,
+    updateProductoOrden,
+    productoMedida,
+    setProductoMedida,
+    addMultiplesProducts,
+    addProductMeasure,
+    editProductMeasure,
   };
 };
 
